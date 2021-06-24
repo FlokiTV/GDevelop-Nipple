@@ -1,6 +1,6 @@
 {
   "author": "https://github.com/FlokiTV",
-  "description": "Create virtual joystick for touch \n\n",
+  "description": "Create virtual joystick for touch \n\nScrene Variables for joystick - JOY is name of your joystick\n\nJOY_ANGLE - Angle of analog\nJOY_PRESS - Numbler of directions (1 or 2 for diagonals)\nJOY_DIR - Direction of joystick string\nJOY_DIS - Distance of joystick from center\nJOY_T - Return if is on TOP - Boolean\nJOY_D - Return if is on DOWN - Boolean\nJOY_R - Return if is on RIGHT - Boolean\nJOY_L - Return if is on LEFT - Boolean",
   "extensionNamespace": "",
   "fullName": "🕹 Nipple",
   "helpPath": "https://github.com/FlokiTV/GDevelop-Nipple",
@@ -65,10 +65,10 @@
       "objectGroups": []
     },
     {
-      "description": "Add nipple",
-      "fullName": "",
+      "description": "Create virtual joystick",
+      "fullName": "Create virtual joystick",
       "functionType": "Action",
-      "name": "Add",
+      "name": "add",
       "private": false,
       "sentence": "Add nipple _PARAM1_ size _PARAM6_ on position X _PARAM2_ and Y _PARAM3_ - Width: _PARAM4_ Height _PARAM5_ Background _PARAM8_ Type _PARAM7_; Debug _PARAM9_",
       "events": [
@@ -77,16 +77,6 @@
           "folded": false,
           "type": "BuiltinCommonInstructions::Standard",
           "conditions": [
-            {
-              "type": {
-                "inverted": false,
-                "value": "DepartScene"
-              },
-              "parameters": [
-                ""
-              ],
-              "subInstructions": []
-            },
             {
               "type": {
                 "inverted": false,
@@ -102,27 +92,19 @@
               "disabled": false,
               "folded": false,
               "type": "BuiltinCommonInstructions::JsCode",
-              "inlineCode": "let APP_NAME = eventsFunctionContext.getArgument(\"Name\")\nlet TYPE     = eventsFunctionContext.getArgument(\"Type\")\nlet SIZE     = eventsFunctionContext.getArgument(\"Size\")\nlet DEBUG    = eventsFunctionContext.getArgument(\"Debug\")\nlet X = eventsFunctionContext.getArgument(\"X\")\nlet Y = eventsFunctionContext.getArgument(\"Y\")\nlet W = eventsFunctionContext.getArgument(\"W\")\nlet H = eventsFunctionContext.getArgument(\"H\")\nlet BG = eventsFunctionContext.getArgument(\"BG\").split(\";\").join(\",\")\nlet nipple   = document.createElement('div')\nnipple.id = `_joystick_${APP_NAME}`\nnipple.setAttribute(\"style\", `\n    position: absolute;\n    width: ${W};\n    height: ${H};\n    left: ${X};\n    top: ${Y};\n    background: rgba(${BG}, 0${DEBUG ? '.05': ''});\n`)\ndocument.querySelector('body').appendChild(nipple)\n\nvar options = {\n    zone: document.querySelector(`#_joystick_${APP_NAME}`),\n    mode: TYPE,\n    size: SIZE,\n    position: {\n      left: '50%',\n      top: '50%'\n    },\n    color: `rgba(${BG}, 1)`\n};\nvar manager = nipplejs.create(options);\nconst getDir = ang =>{\n    if( ang > 337.5 ) return \"right\"\n    if( ang < 22.5 ) return \"right\"\n    if( ang < 337.5 && ang > 292.5 ) return \"right+down\"\n    if( ang < 292.5 && ang > 247.5 ) return \"down\"\n    if( ang < 247.5 && ang > 202.5 ) return \"left+down\"\n    if( ang < 202.5 && ang > 157.5 ) return \"left\"\n    if( ang < 157.5 && ang > 112.5 ) return \"left+top\"\n    if( ang < 112.5 && ang > 67.5 ) return \"top\"\n    if( ang < 67.5 && ang >  22.5 ) return \"top+right\"\n    return ang\n}\nruntimeScene.getVariables().add(APP_NAME+\"_ANGLE\")\nruntimeScene.getVariables().add(APP_NAME+\"_PRESS\")\nruntimeScene.getVariables().add(APP_NAME+\"_DIR\")\nruntimeScene.getVariables().add(APP_NAME+\"_DIS\")\nruntimeScene.getVariables().add(APP_NAME+\"_T\")\nruntimeScene.getVariables().add(APP_NAME+\"_D\")\nruntimeScene.getVariables().add(APP_NAME+\"_R\")\nruntimeScene.getVariables().add(APP_NAME+\"_L\")\n\nmanager.on('move', (evt, data) =>{\n    let dir = getDir(data.angle.degree)\n    runtimeScene.getVariables().get(APP_NAME+\"_ANGLE\").setString(data.angle.degree)\n    runtimeScene.getVariables().get(APP_NAME+\"_DIR\").setString(dir)\n    runtimeScene.getVariables().get(APP_NAME+\"_DIS\").setValue(parseInt(data.distance))\n    runtimeScene.getVariables().get(APP_NAME+\"_PRESS\").setValue(dir.includes(\"+\") ? 2 : 1)\n    runtimeScene.getVariables().get(APP_NAME+\"_T\").setBoolean(dir.includes(\"top\")) \n    runtimeScene.getVariables().get(APP_NAME+\"_D\").setBoolean(dir.includes(\"down\")) \n    runtimeScene.getVariables().get(APP_NAME+\"_R\").setBoolean(dir.includes(\"right\")) \n    runtimeScene.getVariables().get(APP_NAME+\"_L\").setBoolean(dir.includes(\"left\")) \n})\n\nmanager.on('end', (evt, data) =>{\n    runtimeScene.getVariables().get(APP_NAME+\"_ANGLE\").setValue(0)\n    runtimeScene.getVariables().get(APP_NAME+\"_DIS\").setValue(0)\n    runtimeScene.getVariables().get(APP_NAME+\"_PRESS\").setValue(0)\n    runtimeScene.getVariables().get(APP_NAME+\"_T\").setBoolean(false) \n    runtimeScene.getVariables().get(APP_NAME+\"_D\").setBoolean(false) \n    runtimeScene.getVariables().get(APP_NAME+\"_R\").setBoolean(false) \n    runtimeScene.getVariables().get(APP_NAME+\"_L\").setBoolean(false) \n})\n",
+              "inlineCode": "let APP_NAME = eventsFunctionContext.getArgument(\"Name\")\nlet TYPE     = eventsFunctionContext.getArgument(\"Type\")\nlet SIZE     = eventsFunctionContext.getArgument(\"Size\")\nlet DEBUG    = eventsFunctionContext.getArgument(\"Debug\")\nlet X = eventsFunctionContext.getArgument(\"X\")\nlet Y = eventsFunctionContext.getArgument(\"Y\")\nlet W = eventsFunctionContext.getArgument(\"W\")\nlet H = eventsFunctionContext.getArgument(\"H\")\nlet BG = eventsFunctionContext.getArgument(\"BG\").split(\";\").join(\",\")\nlet nipple   = document.createElement('div')\nnipple.id = `_joystick_${APP_NAME}`\n// nipple.setAttribute(\"style\", `\n//     position: absolute;\n//     width: ${W};\n//     height: ${H};\n//     left: ${X};\n//     top: ${Y};\n//     background: rgba(${BG}, 0${DEBUG ? '.05': ''});\n// `)\nnipple.style.position = \"absolute\"\nnipple.style.width = W\nnipple.style.height = H\nnipple.style.left = X\nnipple.style.top = Y\nnipple.style.background = `rgba(${BG}, 0${DEBUG ? '.05': ''})`\ndocument.querySelector('body').appendChild(nipple)\n\nvar options = {\n    zone: document.querySelector(`#_joystick_${APP_NAME}`),\n    mode: TYPE,\n    size: SIZE,\n    position: {\n      left: '50%',\n      top: '50%'\n    },\n    color: `rgba(${BG}, 1)`\n};\nvar manager = nipplejs.create(options);\nconst getDir = ang =>{\n    if( ang > 337.5 ) return \"right\"\n    if( ang < 22.5 ) return \"right\"\n    if( ang < 337.5 && ang > 292.5 ) return \"right+down\"\n    if( ang < 292.5 && ang > 247.5 ) return \"down\"\n    if( ang < 247.5 && ang > 202.5 ) return \"left+down\"\n    if( ang < 202.5 && ang > 157.5 ) return \"left\"\n    if( ang < 157.5 && ang > 112.5 ) return \"left+top\"\n    if( ang < 112.5 && ang > 67.5 ) return \"top\"\n    if( ang < 67.5 && ang >  22.5 ) return \"top+right\"\n    return ang\n}\nruntimeScene.getVariables().add(APP_NAME+\"_ANGLE\")\nruntimeScene.getVariables().add(APP_NAME+\"_PRESS\")\nruntimeScene.getVariables().add(APP_NAME+\"_DIR\")\nruntimeScene.getVariables().add(APP_NAME+\"_DIS\")\nruntimeScene.getVariables().add(APP_NAME+\"_T\")\nruntimeScene.getVariables().add(APP_NAME+\"_D\")\nruntimeScene.getVariables().add(APP_NAME+\"_R\")\nruntimeScene.getVariables().add(APP_NAME+\"_L\")\n\nmanager.on('move', (evt, data) =>{\n    let dir = getDir(data.angle.degree)\n    runtimeScene.getVariables().get(APP_NAME+\"_ANGLE\").setString(data.angle.degree)\n    runtimeScene.getVariables().get(APP_NAME+\"_DIR\").setString(dir)\n    runtimeScene.getVariables().get(APP_NAME+\"_DIS\").setValue(parseInt(data.distance))\n    runtimeScene.getVariables().get(APP_NAME+\"_PRESS\").setValue(dir.includes(\"+\") ? 2 : 1)\n    runtimeScene.getVariables().get(APP_NAME+\"_T\").setBoolean(dir.includes(\"top\")) \n    runtimeScene.getVariables().get(APP_NAME+\"_D\").setBoolean(dir.includes(\"down\")) \n    runtimeScene.getVariables().get(APP_NAME+\"_R\").setBoolean(dir.includes(\"right\")) \n    runtimeScene.getVariables().get(APP_NAME+\"_L\").setBoolean(dir.includes(\"left\")) \n})\n\nmanager.on('end', (evt, data) =>{\n    runtimeScene.getVariables().get(APP_NAME+\"_ANGLE\").setValue(0)\n    runtimeScene.getVariables().get(APP_NAME+\"_DIS\").setValue(0)\n    runtimeScene.getVariables().get(APP_NAME+\"_PRESS\").setValue(0)\n    runtimeScene.getVariables().get(APP_NAME+\"_T\").setBoolean(false) \n    runtimeScene.getVariables().get(APP_NAME+\"_D\").setBoolean(false) \n    runtimeScene.getVariables().get(APP_NAME+\"_R\").setBoolean(false) \n    runtimeScene.getVariables().get(APP_NAME+\"_L\").setBoolean(false) \n})\n",
               "parameterObjects": "",
               "useStrict": true,
               "eventsSheetExpanded": true
             }
           ]
-        },
-        {
-          "disabled": false,
-          "folded": false,
-          "type": "BuiltinCommonInstructions::Standard",
-          "conditions": [],
-          "actions": [],
-          "events": []
         }
       ],
       "parameters": [
         {
           "codeOnly": false,
           "defaultValue": "",
-          "description": "",
+          "description": "Joystick name",
           "longDescription": "",
           "name": "Name",
           "optional": false,
@@ -132,7 +114,7 @@
         {
           "codeOnly": false,
           "defaultValue": "",
-          "description": "",
+          "description": "X position (use px or % - this is a css position)",
           "longDescription": "",
           "name": "X",
           "optional": false,
@@ -142,7 +124,7 @@
         {
           "codeOnly": false,
           "defaultValue": "",
-          "description": "",
+          "description": "Y position  (use px or % - this is a css position)",
           "longDescription": "",
           "name": "Y",
           "optional": false,
@@ -152,7 +134,7 @@
         {
           "codeOnly": false,
           "defaultValue": "",
-          "description": "",
+          "description": "Container Width (use px or % - this is a css size)",
           "longDescription": "",
           "name": "W",
           "optional": false,
@@ -162,7 +144,7 @@
         {
           "codeOnly": false,
           "defaultValue": "",
-          "description": "",
+          "description": "Container Height (use px or % - this is a css size)",
           "longDescription": "",
           "name": "H",
           "optional": false,
@@ -172,7 +154,7 @@
         {
           "codeOnly": false,
           "defaultValue": "",
-          "description": "",
+          "description": "Joystick size",
           "longDescription": "",
           "name": "Size",
           "optional": false,
@@ -182,7 +164,7 @@
         {
           "codeOnly": false,
           "defaultValue": "",
-          "description": "",
+          "description": "Type of joystick (default: dynamic)",
           "longDescription": "",
           "name": "Type",
           "optional": false,
@@ -192,7 +174,7 @@
         {
           "codeOnly": false,
           "defaultValue": "",
-          "description": "<b>asd</b>",
+          "description": "Color",
           "longDescription": "",
           "name": "BG",
           "optional": false,
@@ -202,12 +184,348 @@
         {
           "codeOnly": false,
           "defaultValue": "",
-          "description": "",
+          "description": "Debug",
           "longDescription": "",
           "name": "Debug",
           "optional": false,
           "supplementaryInformation": "",
           "type": "yesorno"
+        }
+      ],
+      "objectGroups": []
+    },
+    {
+      "description": "Remove joystick",
+      "fullName": "Remove joystick",
+      "functionType": "Action",
+      "name": "remove",
+      "private": false,
+      "sentence": "Remove joystick _PARAM1_",
+      "events": [
+        {
+          "disabled": false,
+          "folded": false,
+          "type": "BuiltinCommonInstructions::Standard",
+          "conditions": [
+            {
+              "type": {
+                "inverted": false,
+                "value": "BuiltinCommonInstructions::Once"
+              },
+              "parameters": [],
+              "subInstructions": []
+            },
+            {
+              "type": {
+                "inverted": false,
+                "value": "Nipple::exist"
+              },
+              "parameters": [
+                "",
+                "GetArgumentAsString(\"Name\")",
+                ""
+              ],
+              "subInstructions": []
+            }
+          ],
+          "actions": [],
+          "events": [
+            {
+              "disabled": false,
+              "folded": false,
+              "type": "BuiltinCommonInstructions::JsCode",
+              "inlineCode": "let APP_NAME = eventsFunctionContext.getArgument(\"Name\")\ndocument.querySelector(`#_joystick_${APP_NAME}`).remove()",
+              "parameterObjects": "",
+              "useStrict": true,
+              "eventsSheetExpanded": false
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "codeOnly": false,
+          "defaultValue": "",
+          "description": "Joystick name",
+          "longDescription": "",
+          "name": "Name",
+          "optional": false,
+          "supplementaryInformation": "",
+          "type": "string"
+        }
+      ],
+      "objectGroups": []
+    },
+    {
+      "description": "Set joystick position",
+      "fullName": "Set joystick position",
+      "functionType": "Action",
+      "name": "setPosition",
+      "private": false,
+      "sentence": "Set joystick _PARAM1_ position _PARAM2_ ",
+      "events": [
+        {
+          "disabled": false,
+          "folded": false,
+          "type": "BuiltinCommonInstructions::Standard",
+          "conditions": [
+            {
+              "type": {
+                "inverted": false,
+                "value": "Nipple::exist"
+              },
+              "parameters": [
+                "",
+                "GetArgumentAsString(\"Name\")",
+                ""
+              ],
+              "subInstructions": []
+            }
+          ],
+          "actions": [],
+          "events": [
+            {
+              "disabled": false,
+              "folded": false,
+              "type": "BuiltinCommonInstructions::JsCode",
+              "inlineCode": "let APP_NAME = eventsFunctionContext.getArgument(\"Name\")\nlet POSITION = eventsFunctionContext.getArgument(\"Position\")\nlet EL = document.querySelector(`#_joystick_${APP_NAME}`)\n// document.querySelector(`#_joystick_${APP_NAME}`).style.display = \"block\"\nconsole.log(POSITION)\nswitch(POSITION){\n    case \"Top left\":\n        EL.style.top = 0\n        EL.style.left = 0\n    break\n    case \"Top center\":\n        EL.style.top = 0\n        EL.style.left = \"calc(50% - \"+EL.offsetWidth/2+\"px)\"\n    break\n    case \"Top right\":\n        EL.style.top = 0\n        EL.style.left = \"calc(100% - \"+EL.offsetWidth+\"px)\"\n    break\n    case \"Center left\":\n        EL.style.top = \"calc(50% - \"+EL.offsetHeight/2+\"px)\"\n        EL.style.left = 0\n    break\n    case \"Center center\":\n        EL.style.top = \"calc(50% - \"+EL.offsetHeight/2+\"px)\"\n        EL.style.left = \"calc(50% - \"+EL.offsetWidth/2+\"px)\"\n    break\n    case \"Center right\":\n        EL.style.top = \"calc(50% - \"+EL.offsetHeight/2+\"px)\"\n        EL.style.left = \"calc(100% - \"+EL.offsetWidth+\"px)\"\n    break\n    case \"Bottom left\":\n        EL.style.top = \"calc(100% - \"+EL.offsetWidth+\"px)\"\n        EL.style.left = 0\n    break\n    case \"Bottom center\":\n        EL.style.top = \"calc(100% - \"+EL.offsetWidth+\"px)\"\n        EL.style.left = \"calc(50% - \"+EL.offsetWidth/2+\"px)\"\n    break\n    case \"Bottom right\":\n        EL.style.top = \"calc(100% - \"+EL.offsetWidth+\"px)\"\n        EL.style.left = \"calc(100% - \"+EL.offsetHeight+\"px)\"\n    break\n}\n",
+              "parameterObjects": "",
+              "useStrict": true,
+              "eventsSheetExpanded": false
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "codeOnly": false,
+          "defaultValue": "",
+          "description": "Joystick name",
+          "longDescription": "",
+          "name": "Name",
+          "optional": false,
+          "supplementaryInformation": "",
+          "type": "string"
+        },
+        {
+          "codeOnly": false,
+          "defaultValue": "",
+          "description": "Position",
+          "longDescription": "",
+          "name": "Position",
+          "optional": false,
+          "supplementaryInformation": "[\"Top left\",\"Top center\",\"Top right\",\"Center left\",\"Center center\",\"Center right\",\"Bottom left\",\"Bottom center\",\"Bottom right\"]",
+          "type": "stringWithSelector"
+        }
+      ],
+      "objectGroups": []
+    },
+    {
+      "description": "Show joystick",
+      "fullName": "Show joystick",
+      "functionType": "Action",
+      "name": "show",
+      "private": false,
+      "sentence": "Show joystick _PARAM1_",
+      "events": [
+        {
+          "disabled": false,
+          "folded": false,
+          "type": "BuiltinCommonInstructions::Standard",
+          "conditions": [
+            {
+              "type": {
+                "inverted": false,
+                "value": "BuiltinCommonInstructions::Once"
+              },
+              "parameters": [],
+              "subInstructions": []
+            },
+            {
+              "type": {
+                "inverted": false,
+                "value": "Nipple::exist"
+              },
+              "parameters": [
+                "",
+                "GetArgumentAsString(\"Name\")",
+                ""
+              ],
+              "subInstructions": []
+            }
+          ],
+          "actions": [],
+          "events": [
+            {
+              "disabled": false,
+              "folded": false,
+              "type": "BuiltinCommonInstructions::JsCode",
+              "inlineCode": "let APP_NAME = eventsFunctionContext.getArgument(\"Name\")\ndocument.querySelector(`#_joystick_${APP_NAME}`).style.display = \"block\"",
+              "parameterObjects": "",
+              "useStrict": true,
+              "eventsSheetExpanded": false
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "codeOnly": false,
+          "defaultValue": "",
+          "description": "Joystick name",
+          "longDescription": "",
+          "name": "Name",
+          "optional": false,
+          "supplementaryInformation": "",
+          "type": "string"
+        }
+      ],
+      "objectGroups": []
+    },
+    {
+      "description": "Hide joystick",
+      "fullName": "Hide joystick",
+      "functionType": "Action",
+      "name": "hide",
+      "private": false,
+      "sentence": "Hide joystick _PARAM1_",
+      "events": [
+        {
+          "disabled": false,
+          "folded": false,
+          "type": "BuiltinCommonInstructions::Standard",
+          "conditions": [
+            {
+              "type": {
+                "inverted": false,
+                "value": "BuiltinCommonInstructions::Once"
+              },
+              "parameters": [],
+              "subInstructions": []
+            },
+            {
+              "type": {
+                "inverted": false,
+                "value": "Nipple::exist"
+              },
+              "parameters": [
+                "",
+                "GetArgumentAsString(\"Name\")",
+                ""
+              ],
+              "subInstructions": []
+            }
+          ],
+          "actions": [],
+          "events": [
+            {
+              "disabled": false,
+              "folded": false,
+              "type": "BuiltinCommonInstructions::JsCode",
+              "inlineCode": "let APP_NAME = eventsFunctionContext.getArgument(\"Name\")\ndocument.querySelector(`#_joystick_${APP_NAME}`).style.display = \"none\"",
+              "parameterObjects": "",
+              "useStrict": true,
+              "eventsSheetExpanded": false
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "codeOnly": false,
+          "defaultValue": "",
+          "description": "Joystick name",
+          "longDescription": "",
+          "name": "Name",
+          "optional": false,
+          "supplementaryInformation": "",
+          "type": "string"
+        }
+      ],
+      "objectGroups": []
+    },
+    {
+      "description": "Check if joystick is hidden",
+      "fullName": "Check if joystick is hidden",
+      "functionType": "Condition",
+      "name": "isHide",
+      "private": false,
+      "sentence": "Check if _PARAM1_ is hidden",
+      "events": [
+        {
+          "disabled": false,
+          "folded": false,
+          "type": "BuiltinCommonInstructions::Standard",
+          "conditions": [
+            {
+              "type": {
+                "inverted": false,
+                "value": "Nipple::exist"
+              },
+              "parameters": [
+                "",
+                "GetArgumentAsString(\"Name\")",
+                ""
+              ],
+              "subInstructions": []
+            }
+          ],
+          "actions": [],
+          "events": [
+            {
+              "disabled": false,
+              "folded": false,
+              "type": "BuiltinCommonInstructions::JsCode",
+              "inlineCode": "let APP_NAME = eventsFunctionContext.getArgument(\"Name\")\n\neventsFunctionContext.returnValue = document.querySelector(`#_joystick_${APP_NAME}`).style.display == \"none\" || false",
+              "parameterObjects": "",
+              "useStrict": true,
+              "eventsSheetExpanded": false
+            }
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "codeOnly": false,
+          "defaultValue": "",
+          "description": "Joystick name",
+          "longDescription": "",
+          "name": "Name",
+          "optional": false,
+          "supplementaryInformation": "",
+          "type": "string"
+        }
+      ],
+      "objectGroups": []
+    },
+    {
+      "description": "Check if joystick exist",
+      "fullName": "Check if joystick exist",
+      "functionType": "Condition",
+      "name": "exist",
+      "private": false,
+      "sentence": "Check if _PARAM1_ exist",
+      "events": [
+        {
+          "disabled": false,
+          "folded": false,
+          "type": "BuiltinCommonInstructions::JsCode",
+          "inlineCode": "let APP_NAME = eventsFunctionContext.getArgument(\"Name\")\nlet check = document.querySelector(`#_joystick_${APP_NAME}`) || false\n\neventsFunctionContext.returnValue = check",
+          "parameterObjects": "",
+          "useStrict": true,
+          "eventsSheetExpanded": false
+        }
+      ],
+      "parameters": [
+        {
+          "codeOnly": false,
+          "defaultValue": "",
+          "description": "Joystick name",
+          "longDescription": "",
+          "name": "Name",
+          "optional": false,
+          "supplementaryInformation": "",
+          "type": "string"
         }
       ],
       "objectGroups": []
